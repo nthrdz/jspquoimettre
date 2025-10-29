@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlink - Plateforme Sportive</title>
+    <meta name="description" content="Athlink - La plateforme sportive pour les athlètes. Gérez votre profil, partagez vos performances et connectez-vous avec d'autres sportifs.">
+    <meta name="keywords" content="sport, athlète, performance, course, vélo, natation, triathlon, fitness">
+    <meta name="author" content="Athlink">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://athlink.fr/">
+    <meta property="og:title" content="Athlink - Plateforme Sportive">
+    <meta property="og:description" content="La plateforme sportive pour les athlètes. Gérez votre profil, partagez vos performances et connectez-vous avec d'autres sportifs.">
+    <meta property="og:image" content="https://athlink.fr/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://athlink.fr/">
+    <meta property="twitter:title" content="Athlink - Plateforme Sportive">
+    <meta property="twitter:description" content="La plateforme sportive pour les athlètes. Gérez votre profil, partagez vos performances et connectez-vous avec d'autres sportifs.">
+    <meta property="twitter:image" content="https://athlink.fr/og-image.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-icon.png">
+    
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #f8f9fa;
+            --border-color: #e1e5e9;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            padding: 48px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--secondary-color));
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--text-dark);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--text-dark);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .link:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .error {
+            background: #fef2f2;
+            color: var(--error-color);
+            border-color: #fecaca;
+        }
+
+        .success {
+            background: #f0fdf4;
+            color: var(--success-color);
+            border-color: #bbf7d0;
+        }
+
+        .warning {
+            background: #fffbeb;
+            color: var(--warning-color);
+            border-color: #fed7aa;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .dashboard {
+            text-align: left;
+        }
+
+        .user-info {
+            background: var(--bg-light);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-info h3 {
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            font-size: 1.3rem;
+        }
+
+        .user-info p {
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .user-info strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: var(--error-color);
+            width: auto;
+            padding: 12px 24px;
+            font-size: 14px;
+            float: right;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .sport-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .sport-option {
+            padding: 16px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: 500;
+            background: white;
+        }
+
+        .sport-option:hover {
+            border-color: var(--primary-color);
+            background: #f8f9ff;
+            transform: translateY(-2px);
+        }
+
+        .sport-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                margin: 20px;
+                padding: 32px 24px;
+                border-radius: 20px;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .sport-options {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-dark: #f8f9fa;
+                --text-light: #adb5bd;
+                --bg-light: #2d3748;
+                --border-color: #4a5568;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container fade-in">
+        <!-- Page de connexion -->
+        <div id="loginPage">
+            <div class="logo">Athlink</div>
+            <p class="tagline">Votre plateforme sportive</p>
+            <h2>Connexion</h2>
+            <div id="loginError" class="alert error hidden"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Adresse email</label>
+                    <input type="email" id="loginEmail" required placeholder="votre@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Mot de passe</label>
+                    <input type="password" id="loginPassword" required placeholder="Votre mot de passe">
+                </div>
+                <button type="submit" class="btn" id="loginBtn">
+                    <span id="loginBtnText">Se connecter</span>
+                    <div id="loginBtnLoading" class="loading hidden"></div>
+                </button>
+            </form>
+            <p style="margin-top: 24px;">
+                Pas de compte ? <a href="#" class="link" onclick="showSignup()">Créer un compte</a>
+            </p>
+        </div>
+
+        <!-- Page d'inscription -->
+        <div id="signupPage" class="hidden">
+            <div class="logo">Athlink</div>
+            <p class="tagline">Rejoignez la communauté</p>
+            <h2>Créer un compte</h2>
+            <div id="signupError" class="alert error hidden"></div>
+            <div id="signupSuccess" class="alert success hidden"></div>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Nom complet</label>
+                    <input type="text" id="signupName" required placeholder="Votre nom complet">
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Adresse email</label>
+                    <input type="email" id="signupEmail" required placeholder="votre@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Mot de passe</label>
+                    <input type="password" id="signupPassword" required minlength="8" placeholder="Minimum 8 caractères">
+                </div>
+                <div class="form-group">
+                    <label for="signupUsername">Nom d'utilisateur</label>
+                    <input type="text" id="signupUsername" required placeholder="Votre nom d'utilisateur">
+                </div>
+                <div class="form-group">
+                    <label>Sport principal</label>
+                    <div class="sport-options">
+                        <div class="sport-option" data-sport="RUNNING">🏃 Course</div>
+                        <div class="sport-option" data-sport="CYCLING">🚴 Vélo</div>
+                        <div class="sport-option" data-sport="SWIMMING">🏊 Natation</div>
+                        <div class="sport-option" data-sport="TRIATHLON">🏊‍♂️ Triathlon</div>
+                        <div class="sport-option" data-sport="FITNESS">💪 Fitness</div>
+                        <div class="sport-option" data-sport="OTHER">⚽ Autre</div>
+                    </div>
+                    <input type="hidden" id="signupSport" required>
+                </div>
+                <button type="submit" class="btn" id="signupBtn">
+                    <span id="signupBtnText">Créer mon compte</span>
+                    <div id="signupBtnLoading" class="loading hidden"></div>
+                </button>
+            </form>
+            <p style="margin-top: 24px;">
+                Déjà un compte ? <a href="#" class="link" onclick="showLogin()">Se connecter</a>
+            </p>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboardPage" class="hidden dashboard">
+            <div class="logo">Athlink</div>
+            <h2>Tableau de bord</h2>
+            <div class="user-info">
+                <h3>Bienvenue, <span id="userName"></span> !</h3>
+                <p><strong>Email :</strong> <span id="userEmail"></span></p>
+                <p><strong>Nom d'utilisateur :</strong> <span id="userUsername"></span></p>
+                <p><strong>Sport :</strong> <span id="userSport"></span></p>
+            </div>
+            <button class="btn logout-btn" onclick="logout()">Se déconnecter</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration Supabase Production
+        const SUPABASE_URL = 'https://ioyklugzwavjyondimwd.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlveWtsdWd6d2F2anlvbmRpbXdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MjMyNDEsImV4cCI6MjA3NTQ5OTI0MX0.erXctfavoMVh_j_iy-uM7YPMwqktSSs1ZvS2gz9Q04w'
+        
+        // Initialiser Supabase - Configuration simple et directe
+        const { createClient } = supabase
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+        // Variables globales
+        let currentUser = null
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initialisation de l\'application Athlink')
+            checkAuth()
+            setupEventListeners()
+        })
+
+        // Vérifier l'authentification au chargement
+        async function checkAuth() {
+            try {
+                console.log('🔍 Vérification de l\'authentification...')
+                const { data: { user }, error } = await supabaseClient.auth.getUser()
+                
+                if (error) {
+                    console.error('❌ Erreur de vérification auth:', error)
+                    showLogin()
+                    return
+                }
+                
+                if (user) {
+                    console.log('✅ Utilisateur connecté:', user.email)
+                    currentUser = user
+                    showDashboard()
+                } else {
+                    console.log('ℹ️ Aucun utilisateur connecté')
+                    showLogin()
+                }
+            } catch (error) {
+                console.error('❌ Erreur inattendue lors de la vérification auth:', error)
+                showLogin()
+            }
+        }
+
+        // Configuration des événements
+        function setupEventListeners() {
+            // Formulaire de connexion
+            document.getElementById('loginForm').addEventListener('submit', handleLogin)
+            
+            // Formulaire d'inscription
+            document.getElementById('signupForm').addEventListener('submit', handleSignup)
+            
+            // Sélection du sport
+            document.querySelectorAll('.sport-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.sport-option').forEach(opt => opt.classList.remove('selected'))
+                    this.classList.add('selected')
+                    document.getElementById('signupSport').value = this.dataset.sport
+                })
+            })
+        }
+
+        // Gestion de la connexion
+        async function handleLogin(e) {
+            e.preventDefault()
+            
+            const email = document.getElementById('loginEmail').value
+            const password = document.getElementById('loginPassword').value
+            const loginBtn = document.getElementById('loginBtn')
+            const loginBtnText = document.getElementById('loginBtnText')
+            const loginBtnLoading = document.getElementById('loginBtnLoading')
+            
+            setLoading(loginBtn, loginBtnText, loginBtnLoading, true)
+            hideAlert('loginError')
+            
+            try {
+                console.log('🔐 Tentative de connexion pour:', email)
+                
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email,
+                    password
+                })
+                
+                if (error) {
+                    console.error('❌ Erreur de connexion:', error)
+                    showAlert('loginError', 'Email ou mot de passe incorrect')
+                    return
+                }
+                
+                if (data.user) {
+                    console.log('✅ Connexion réussie!')
+                    console.log('👤 Utilisateur:', data.user.email)
+                    console.log('🔑 Session active:', !!data.session)
+                    
+                    currentUser = data.user
+                    showDashboard()
+                } else {
+                    console.error('❌ Aucun utilisateur retourné')
+                    showAlert('loginError', 'Erreur lors de la connexion')
+                }
+                
+            } catch (error) {
+                console.error('❌ Erreur inattendue:', error)
+                showAlert('loginError', 'Une erreur est survenue')
+            } finally {
+                setLoading(loginBtn, loginBtnText, loginBtnLoading, false)
+            }
+        }
+
+        // Gestion de l'inscription
+        async function handleSignup(e) {
+            e.preventDefault()
+            
+            const name = document.getElementById('signupName').value
+            const email = document.getElementById('signupEmail').value
+            const password = document.getElementById('signupPassword').value
+            const username = document.getElementById('signupUsername').value
+            const sport = document.getElementById('signupSport').value
+            
+            const signupBtn = document.getElementById('signupBtn')
+            const signupBtnText = document.getElementById('signupBtnText')
+            const signupBtnLoading = document.getElementById('signupBtnLoading')
+            
+            if (!sport) {
+                showAlert('signupError', 'Veuillez sélectionner un sport')
+                return
+            }
+            
+            setLoading(signupBtn, signupBtnText, signupBtnLoading, true)
+            hideAlert('signupError')
+            hideAlert('signupSuccess')
+            
+            try {
+                console.log('📝 Création du compte pour:', email)
+                
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            name,
+                            username,
+                            sport
+                        }
+                    }
+                })
+                
+                if (error) {
+                    console.error('❌ Erreur d\'inscription:', error)
+                    if (error.message.includes('already registered')) {
+                        showAlert('signupError', 'Cet email est déjà utilisé')
+                    } else {
+                        showAlert('signupError', 'Erreur lors de la création du compte')
+                    }
+                    return
+                }
+                
+                if (data.user) {
+                    console.log('✅ Compte créé avec succès!')
+                    showAlert('signupSuccess', 'Compte créé avec succès ! Vous pouvez maintenant vous connecter.')
+                    
+                    // Créer le profil dans la base de données
+                    await createUserProfile(data.user.id, {
+                        name,
+                        email,
+                        username,
+                        sport
+                    })
+                    
+                    // Rediriger vers la page de connexion après 2 secondes
+                    setTimeout(() => {
+                        showLogin()
+                    }, 2000)
+                }
+                
+            } catch (error) {
+                console.error('❌ Erreur inattendue:', error)
+                showAlert('signupError', 'Une erreur est survenue')
+            } finally {
+                setLoading(signupBtn, signupBtnText, signupBtnLoading, false)
+            }
+        }
+
+        // Créer le profil utilisateur dans la base de données
+        async function createUserProfile(userId, profileData) {
+            try {
+                console.log('👤 Création du profil pour:', profileData.email)
+                
+                const { error } = await supabaseClient
+                    .from('profiles')
+                    .insert([{
+                        id: userId,
+                        username: profileData.username,
+                        display_name: profileData.name,
+                        sport: profileData.sport,
+                        plan: 'FREE',
+                        is_public: true
+                    }])
+                
+                if (error) {
+                    console.error('❌ Erreur création profil:', error)
+                } else {
+                    console.log('✅ Profil créé avec succès')
+                }
+            } catch (error) {
+                console.error('❌ Erreur création profil:', error)
+            }
+        }
+
+        // Déconnexion
+        async function logout() {
+            try {
+                console.log('🚪 Déconnexion...')
+                await supabaseClient.auth.signOut()
+                currentUser = null
+                showLogin()
+                console.log('✅ Déconnexion réussie')
+            } catch (error) {
+                console.error('❌ Erreur de déconnexion:', error)
+            }
+        }
+
+        // Afficher la page de connexion
+        function showLogin() {
+            console.log('📄 Affichage de la page de connexion')
+            document.getElementById('loginPage').classList.remove('hidden')
+            document.getElementById('signupPage').classList.add('hidden')
+            document.getElementById('dashboardPage').classList.add('hidden')
+        }
+
+        // Afficher la page d'inscription
+        function showSignup() {
+            console.log('📄 Affichage de la page d\'inscription')
+            document.getElementById('loginPage').classList.add('hidden')
+            document.getElementById('signupPage').classList.remove('hidden')
+            document.getElementById('dashboardPage').classList.add('hidden')
+        }
+
+        // Afficher le dashboard
+        function showDashboard() {
+            console.log('🏠 Affichage du dashboard')
+            console.log('👤 Utilisateur actuel:', currentUser?.email)
+            
+            // Masquer les autres pages
+            document.getElementById('loginPage').classList.add('hidden')
+            document.getElementById('signupPage').classList.add('hidden')
+            
+            // Afficher le dashboard
+            const dashboardPage = document.getElementById('dashboardPage')
+            dashboardPage.classList.remove('hidden')
+            
+            console.log('✅ Dashboard affiché:', !dashboardPage.classList.contains('hidden'))
+            
+            if (currentUser) {
+                const userName = currentUser.user_metadata?.name || currentUser.email
+                const userEmail = currentUser.email
+                const userUsername = currentUser.user_metadata?.username || 'N/A'
+                const userSport = getSportDisplayName(currentUser.user_metadata?.sport) || 'N/A'
+                
+                console.log('📊 Données utilisateur:', { userName, userEmail, userUsername, userSport })
+                
+                document.getElementById('userName').textContent = userName
+                document.getElementById('userEmail').textContent = userEmail
+                document.getElementById('userUsername').textContent = userUsername
+                document.getElementById('userSport').textContent = userSport
+                
+                console.log('✅ Dashboard mis à jour avec les données utilisateur')
+            } else {
+                console.error('❌ Aucun utilisateur pour afficher le dashboard')
+            }
+        }
+
+        // Convertir le code sport en nom affiché
+        function getSportDisplayName(sportCode) {
+            const sports = {
+                'RUNNING': '🏃 Course',
+                'CYCLING': '🚴 Vélo',
+                'SWIMMING': '🏊 Natation',
+                'TRIATHLON': '🏊‍♂️ Triathlon',
+                'FITNESS': '💪 Fitness',
+                'OTHER': '⚽ Autre'
+            }
+            return sports[sportCode] || sportCode
+        }
+
+        // Afficher une alerte
+        function showAlert(elementId, message) {
+            const alertDiv = document.getElementById(elementId)
+            alertDiv.textContent = message
+            alertDiv.classList.remove('hidden')
+        }
+
+        // Masquer une alerte
+        function hideAlert(elementId) {
+            document.getElementById(elementId).classList.add('hidden')
+        }
+
+        // Gérer l'état de chargement des boutons
+        function setLoading(btn, text, loading, isLoading) {
+            if (isLoading) {
+                btn.disabled = true
+                text.classList.add('hidden')
+                loading.classList.remove('hidden')
+            } else {
+                btn.disabled = false
+                text.classList.remove('hidden')
+                loading.classList.add('hidden')
+            }
+        }
+    </script>
+</body>
+</html>

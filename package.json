@@ -1,0 +1,24 @@
+{
+  "name": "athlink",
+  "version": "1.0.0",
+  "description": "Plateforme sportive Athlink - Application pure Supabase",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "dev": "python3 -m http.server 8000",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "sport",
+    "athlete",
+    "supabase",
+    "static",
+    "html"
+  ],
+  "author": "Athlink",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,156 @@
+// Modèles pour le système d'affiliation
+// À ajouter dans votre schema.prisma existant
+
+enum AffiliateStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REJECTED
+}
+
+enum CommissionType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum CommissionStatus {
+  PENDING
+  APPROVED
+  PAID
+  CANCELLED
+}
+
+model Affiliate {
+  id                String          @id @default(cuid())
+  userId            String          @unique
+  user              User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Informations de l'affilié
+  companyName       String?
+  website           String?
+  description       String?
+  status            AffiliateStatus @default(PENDING)
+  
+  // Configuration des commissions
+  commissionType    CommissionType  @default(PERCENTAGE)
+  commissionRate    Float           @default(10.0) // 10% par défaut
+  fixedAmount       Float?          // Montant fixe si commissionType = FIXED_AMOUNT
+  
+  // Statistiques
+  totalReferrals    Int             @default(0)
+  totalCommissions  Float           @default(0.0)
+  paidCommissions   Float           @default(0.0)
+  
+  // Informations de paiement
+  stripeAccountId   String?         // Compte Stripe Connect de l'affilié
+  bankAccount       String?
+  paypalEmail       String?
+  
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  
+  // Relations
+  referralCodes     ReferralCode[]
+  commissions       Commission[]
+  
+  @@map("affiliates")
+}
+
+model ReferralCode {
+  id                String    @id @default(cuid())
+  affiliateId       String
+  affiliate         Affiliate @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  
+  // Code de parrainage
+  code              String    @unique
+  name              String?   // Nom du code (ex: "SUMMER2024")
+  description       String?
+  
+  // Configuration
+  isActive          Boolean   @default(true)
+  maxUses           Int?      // Limite d'utilisation (null = illimité)
+  currentUses       Int       @default(0)
+  
+  // Dates
+  validFrom         DateTime  @default(now())
+  validUntil        DateTime?
+  
+  // Récompenses
+  discountType      String    @default("PERCENTAGE") // PERCENTAGE, FIXED_AMOUNT
+  discountValue     Float     @default(10.0)
+  freeTrialDays     Int?      // Jours d'essai gratuits
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relations
+  referrals         Referral[]
+  
+  @@map("referral_codes")
+}
+
+model Referral {
+  id                String        @id @default(cuid())
+  referralCodeId    String
+  referralCode      ReferralCode  @relation(fields: [referralCodeId], references: [id], onDelete: Cascade)
+  
+  // Utilisateur qui a utilisé le code
+  userId            String?
+  user              User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Informations de la référence
+  email             String?       // Email de la personne référée
+  ipAddress         String?
+  userAgent         String?
+  
+  // Conversion
+  converted         Boolean       @default(false)
+  convertedAt       DateTime?
+  subscriptionId    String?       // ID de l'abonnement Stripe
+  
+  // Commission générée
+  commissionAmount  Float         @default(0.0)
+  commissionStatus  CommissionStatus @default(PENDING)
+  
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  @@map("referrals")
+}
+
+model Commission {
+  id                String            @id @default(cuid())
+  affiliateId       String
+  affiliate         Affiliate         @relation(fields: [affiliateId], references: [id], onDelete: Cascade)
+  
+  // Informations de la commission
+  amount            Float
+  currency          String            @default("EUR")
+  status            CommissionStatus  @default(PENDING)
+  
+  // Détails de la transaction
+  stripePaymentId   String?           // ID du paiement Stripe
+  description       String?
+  
+  // Dates
+  earnedAt          DateTime          @default(now())
+  paidAt            DateTime?
+  
+  // Métadonnées
+  metadata          Json?             // Données supplémentaires
+  
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  
+  @@map("commissions")
+}
+
+// Ajouter ces relations aux modèles existants
+
+// Dans le modèle User, ajouter :
+// affiliate        Affiliate?
+// referrals        Referral[]
+
+// Dans le modèle Profile, ajouter :
+// usedReferralCode String?
+// referralCode     ReferralCode? @relation(fields: [usedReferralCode], references: [code])

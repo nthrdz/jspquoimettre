@@ -1,0 +1,539 @@
+{
+  "metadata": {
+    "exportedAt": "2025-10-29T12:16:07.477Z",
+    "source": "PostgreSQL via Prisma",
+    "version": "1.0"
+  },
+  "data": {
+    "users": [
+      {
+        "id": "cmhbxyuop00000u6v8jjckg6g",
+        "email": "test@athlink.com",
+        "name": "Test User",
+        "password": "$2b$12$g.X.i/rn6lRCXBww3DrKceL5.gixfy/TJ0MMV95I4TBgumhBwRp4q",
+        "emailVerified": "2025-10-29T11:58:11.152Z",
+        "image": null,
+        "createdAt": "2025-10-29T11:58:11.162Z",
+        "updatedAt": "2025-10-29T11:58:11.162Z"
+      },
+      {
+        "id": "cmgi2ckbf00000uzpcafbg9ih",
+        "email": "llllolrdz@gmail.com",
+        "name": "Rodriguez Nathan",
+        "password": "$2b$12$gIbQGUAYh9KQG3vDsEGFR.nxOSDRyg8W/qSRVks3liGwEnjkhX6aS",
+        "emailVerified": null,
+        "image": null,
+        "createdAt": "2025-10-08T14:07:44.092Z",
+        "updatedAt": "2025-10-29T11:58:37.178Z"
+      }
+    ],
+    "profiles": [
+      {
+        "id": "cmgi2ckbf00010uzpy2a0xsul",
+        "userId": "cmgi2ckbf00000uzpcafbg9ih",
+        "username": "nthrdz",
+        "displayName": "Nathan",
+        "bio": "objectif de devenir fort et rapide. ",
+        "sport": "OTHER",
+        "location": "Paris ",
+        "avatarUrl": "https://ioyklugzwavjyondimwd.supabase.co/storage/v1/object/public/athlink-images/avatars/cmgi2ckbf00010uzpy2a0xsul-avatar-1761036513656.png",
+        "coverUrl": "https://ioyklugzwavjyondimwd.supabase.co/storage/v1/object/public/athlink-images/covers/cmgi2ckbf00010uzpy2a0xsul-cover-1759935981317.JPG",
+        "plan": "ELITE",
+        "customDomain": "nthrdz.com",
+        "trialEndsAt": null,
+        "trialPlan": null,
+        "stripePromoCode": null,
+        "stats": {
+          "heatmap": [
+            {
+              "x": 55,
+              "y": 88.6,
+              "element": "unknown",
+              "timestamp": "2025-10-12T19:09:05.192Z"
+            },
+            {
+              "x": 59,
+              "y": 89.1,
+              "element": "unknown",
+              "timestamp": "2025-10-12T19:12:54.261Z"
+            },
+            {
+              "x": 52.6,
+              "y": 96.5,
+              "element": "unknown",
+              "timestamp": "2025-10-13T07:46:59.732Z"
+            },
+            {
+              "x": 57.2,
+              "y": 89.6,
+              "element": "unknown",
+              "timestamp": "2025-10-13T08:07:33.819Z"
+            },
+            {
+              "x": 54.7,
+              "y": 88.8,
+              "element": "unknown",
+              "timestamp": "2025-10-13T08:08:27.233Z"
+            },
+            {
+              "x": 48.3,
+              "y": 49.7,
+              "element": "unknown",
+              "timestamp": "2025-10-13T08:10:25.080Z"
+            },
+            {
+              "x": 56,
+              "y": 88.8,
+              "element": "unknown",
+              "timestamp": "2025-10-13T08:10:49.262Z"
+            },
+            {
+              "x": 55.3,
+              "y": 98,
+              "element": "unknown",
+              "timestamp": "2025-10-13T08:20:58.035Z"
+            },
+            {
+              "x": 57.2,
+              "y": 96.4,
+              "element": "unknown",
+              "timestamp": "2025-10-13T08:20:58.483Z"
+            },
+            {
+              "x": 52.9,
+              "y": 96.3,
+              "element": "unknown",
+              "timestamp": "2025-10-13T08:21:04.299Z"
+            },
+            {
+              "x": 9,
+              "y": 8.8,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:57:35.883Z"
+            },
+            {
+              "x": 82.7,
+              "y": 19.6,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:57:38.921Z"
+            },
+            {
+              "x": 82.7,
+              "y": 19.6,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:57:44.104Z"
+            },
+            {
+              "x": 53.3,
+              "y": 48.9,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:58:04.115Z"
+            },
+            {
+              "x": 49.9,
+              "y": 53.9,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:58:10.864Z"
+            },
+            {
+              "x": 52.6,
+              "y": 62.5,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:58:26.121Z"
+            },
+            {
+              "x": 58.1,
+              "y": 73,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:58:42.222Z"
+            },
+            {
+              "x": 51.2,
+              "y": 89.1,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:58:57.350Z"
+            },
+            {
+              "x": 53.5,
+              "y": 36.6,
+              "element": "unknown",
+              "timestamp": "2025-10-14T16:59:53.438Z"
+            },
+            {
+              "x": 52.6,
+              "y": 96.3,
+              "element": "unknown",
+              "timestamp": "2025-10-14T17:01:52.698Z"
+            },
+            {
+              "x": 52.2,
+              "y": 96.5,
+              "element": "unknown",
+              "timestamp": "2025-10-16T13:02:31.176Z"
+            },
+            {
+              "x": 53.4,
+              "y": 89.5,
+              "element": "unknown",
+              "timestamp": "2025-10-17T12:33:23.298Z"
+            },
+            {
+              "x": 52,
+              "y": 96.6,
+              "element": "unknown",
+              "timestamp": "2025-10-17T13:02:53.756Z"
+            },
+            {
+              "x": 51.9,
+              "y": 96.4,
+              "element": "unknown",
+              "timestamp": "2025-10-17T13:35:20.391Z"
+            },
+            {
+              "x": 52.7,
+              "y": 33.7,
+              "element": "unknown",
+              "timestamp": "2025-10-20T12:45:46.900Z"
+            },
+            {
+              "x": 53.7,
+              "y": 33.7,
+              "element": "unknown",
+              "timestamp": "2025-10-20T12:45:53.644Z"
+            },
+            {
+              "x": 57.7,
+              "y": 32.5,
+              "element": "unknown",
+              "timestamp": "2025-10-20T12:45:57.993Z"
+            },
+            {
+              "x": 57.6,
+              "y": 32.5,
+              "element": "unknown",
+              "timestamp": "2025-10-20T12:45:58.986Z"
+            },
+            {
+              "x": 83.6,
+              "y": 6.6,
+              "element": "unknown",
+              "timestamp": "2025-10-21T08:13:12.125Z"
+            },
+            {
+              "x": 51.4,
+              "y": 96.5,
+              "element": "unknown",
+              "timestamp": "2025-10-21T08:20:19.757Z"
+            }
+          ],
+          "bookings": [
+            {
+              "id": "booking_1760295956472_3",
+              "date": "2024-01-10",
+              "notes": "Séance terminée avec succès",
+              "price": 50,
+              "status": "COMPLETED",
+              "endTime": "10:00",
+              "service": "Séance Running",
+              "duration": 60,
+              "createdAt": "2025-10-11T19:05:56.472Z",
+              "startTime": "09:00",
+              "clientName": "Sophie Leroy",
+              "clientEmail": "sophie.leroy@email.com",
+              "isPublicRequest": false
+            }
+          ],
+          "demographics": {
+            "devices": {
+              "mobile": 3,
+              "desktop": 38
+            },
+            "browsers": {
+              "Chrome": 38,
+              "Safari": 3
+            },
+            "countries": {}
+          },
+          "originalSport": "Hyrox",
+          "trainingPlans": [
+            {
+              "id": "plan_1760295956464_1",
+              "price": 29.99,
+              "title": "Programme Running Débutant",
+              "_count": {
+                "sessions": 2,
+                "subscribers": 0
+              },
+              "category": "Running",
+              "duration": 8,
+              "isActive": true,
+              "sessions": [
+                {
+                  "id": "session_1760295956472_1",
+                  "title": "Séance 1 - Découverte",
+                  "duration": 25,
+                  "dayNumber": 1,
+                  "exercises": [
+                    "Échauffement 5min",
+                    "Course 2min",
+                    "Marche 5min",
+                    "Course 2min",
+                    "Marche 5min",
+                    "Course 2min",
+                    "Récupération 4min"
+                  ],
+                  "weekNumber": 1,
+                  "description": "Première séance : 5 min de marche, 2 min de course, répéter 3 fois"
+                },
+                {
+                  "id": "session_1760295956472_2",
+                  "title": "Séance 2 - Progression",
+                  "duration": 30,
+                  "dayNumber": 3,
+                  "exercises": [
+                    "Échauffement 5min",
+                    "Course 3min",
+                    "Marche 5min",
+                    "Course 3min",
+                    "Marche 5min",
+                    "Course 3min",
+                    "Récupération 6min"
+                  ],
+                  "weekNumber": 1,
+                  "description": "Deuxième séance : 5 min de marche, 3 min de course, répéter 3 fois"
+                }
+              ],
+              "createdAt": "2025-10-12T19:05:56.464Z",
+              "difficulty": "DEBUTANT",
+              "description": "Un programme complet de 8 semaines pour débuter la course à pied en toute sécurité. Progression progressive avec exercices de renforcement.",
+              "pdfFileName": "programme_running_debutant.pdf",
+              "subscribers": []
+            },
+            {
+              "id": "plan_1760295956472_2",
+              "price": 49.99,
+              "title": "Musculation Intermédiaire",
+              "_count": {
+                "sessions": 1,
+                "subscribers": 0
+              },
+              "category": "Musculation",
+              "duration": 12,
+              "isActive": true,
+              "sessions": [
+                {
+                  "id": "session_1760295956472_3",
+                  "title": "Push Day - Haut du corps",
+                  "duration": 60,
+                  "dayNumber": 1,
+                  "exercises": [
+                    "Développé couché 4x8",
+                    "Développé militaire 4x8",
+                    "Dips 3x10",
+                    "Élévations latérales 3x12"
+                  ],
+                  "weekNumber": 1,
+                  "description": "Séance dédiée aux muscles poussants : pectoraux, épaules, triceps"
+                }
+              ],
+              "createdAt": "2025-10-12T19:05:56.472Z",
+              "difficulty": "INTERMEDIAIRE",
+              "description": "Programme de musculation de 12 semaines pour athlètes intermédiaires. Focus sur la force et la masse musculaire.",
+              "pdfFileName": "programme_musculation.pdf",
+              "subscribers": []
+            }
+          ],
+          "availabilities": [
+            {
+              "id": "avail_1760295956473_1",
+              "endTime": "17:00",
+              "isActive": true,
+              "dayOfWeek": 1,
+              "startTime": "09:00"
+            },
+            {
+              "id": "avail_1760295956473_2",
+              "endTime": "17:00",
+              "isActive": true,
+              "dayOfWeek": 2,
+              "startTime": "09:00"
+            },
+            {
+              "id": "avail_1760295956473_3",
+              "endTime": "17:00",
+              "isActive": true,
+              "dayOfWeek": 3,
+              "startTime": "09:00"
+            },
+            {
+              "id": "avail_1760295956473_4",
+              "endTime": "17:00",
+              "isActive": true,
+              "dayOfWeek": 4,
+              "startTime": "09:00"
+            },
+            {
+              "id": "avail_1760295956473_5",
+              "endTime": "15:00",
+              "isActive": true,
+              "dayOfWeek": 5,
+              "startTime": "09:00"
+            }
+          ]
+        },
+        "instagram": "nthrdz ",
+        "strava": "https://www.strava.com/athletes/159828646",
+        "youtube": null,
+        "tiktok": "nthrdzzz",
+        "twitter": null,
+        "whatsapp": null,
+        "isPublic": true,
+        "theme": "triathlete",
+        "createdAt": "2025-10-08T14:07:44.092Z",
+        "updatedAt": "2025-10-21T08:49:29.432Z"
+      },
+      {
+        "id": "cmhbxyuvj00020u6vhw6em5e2",
+        "userId": "cmhbxyuop00000u6v8jjckg6g",
+        "username": "testuser",
+        "displayName": "Test User",
+        "bio": null,
+        "sport": "RUNNING",
+        "location": null,
+        "avatarUrl": null,
+        "coverUrl": null,
+        "plan": "FREE",
+        "customDomain": null,
+        "trialEndsAt": null,
+        "trialPlan": null,
+        "stripePromoCode": null,
+        "stats": null,
+        "instagram": null,
+        "strava": null,
+        "youtube": null,
+        "tiktok": null,
+        "twitter": null,
+        "whatsapp": null,
+        "isPublic": true,
+        "theme": "runner-pro",
+        "createdAt": "2025-10-29T11:58:11.407Z",
+        "updatedAt": "2025-10-29T11:58:11.407Z"
+      }
+    ],
+    "links": [
+      {
+        "id": "cmgj7j2av00090u6zrwy07r9r",
+        "profileId": "cmgi2ckbf00010uzpy2a0xsul",
+        "title": "coaching ",
+        "url": "https://www.amazon.com/Liquid-Death-Mountain-Water-8-Pack/dp/B0BJ3CJJ4G/ref=sr_1_1?crid=1GT5HIWBQVEFR&dib=eyJ2IjoiMSJ9.zL0SYBmx_3V0zSqNoXqGD_pJXMPeTjwiFpQiSLy9LNM-x0M_bx_A6sIJEZZ5m2Lubo8KcwR6bcPKl_Q5URVJmUtOGoIRoqck7G-N9DroSjnqJxR-dg2XMAN6DjRIvGNcnk8YB3_-kFIVWCrcaRa4SV91KiZcRLO8DHZ9Tmz-Vuov1QYw5X3yIp6utoHSVtAuwTLEJ7S4jaUiWn6NBvyDYKwSU1RVeh_xgT_136sKr_PuKcYPK8b8r7JsQK-51_VZc5mgJqnnQy-PAVoNALTnBd-k9ajf0Og8AzIN-Sm6utw.ZTLWzwDOQFwu74Wz2I4ISXBLABMIJGD-zQDOcBEMZJk&dib_tag=se&keywords=liquid%2Bdeath&qid=1758029309&sprefix=liquid%2Bdeath%2Caps%2C212&sr=8-1&th=1",
+        "description": "liens coaching ",
+        "icon": "🚀",
+        "position": 1,
+        "clicks": 0,
+        "isActive": true,
+        "createdAt": "2025-10-09T09:20:31.591Z",
+        "updatedAt": "2025-10-09T09:20:31.591Z"
+      },
+      {
+        "id": "cmgjdkklt000j0uurc88hvffl",
+        "profileId": "cmgi2ckbf00010uzpy2a0xsul",
+        "title": "coahcing agneda",
+        "url": "https://www.amazon.com/Liquid-Death-Mountain-Water-8-Pack/dp/B0BJ3CJJ4G/ref=sr_1_1?crid=1GT5HIWBQVEFR&dib=eyJ2IjoiMSJ9.zL0SYBmx_3V0zSqNoXqGD_pJXMPeTjwiFpQiSLy9LNM-x0M_bx_A6sIJEZZ5m2Lubo8KcwR6bcPKl_Q5URVJmUtOGoIRoqck7G-N9DroSjnqJxR-dg2XMAN6DjRIvGNcnk8YB3_-kFIVWCrcaRa4SV91KiZcRLO8DHZ9Tmz-Vuov1QYw5X3yIp6utoHSVtAuwTLEJ7S4jaUiWn6NBvyDYKwSU1RVeh_xgT_136sKr_PuKcYPK8b8r7JsQK-51_VZc5mgJqnnQy-PAVoNALTnBd-k9ajf0Og8AzIN-Sm6utw.ZTLWzwDOQFwu74Wz2I4ISXBLABMIJGD-zQDOcBEMZJk&dib_tag=se&keywords=liquid%2Bdeath&qid=1758029309&sprefix=liquid%2Bdeath%2Caps%2C212&sr=8-1&th=1",
+        "description": "",
+        "icon": "🦾",
+        "position": 2,
+        "clicks": 0,
+        "isActive": true,
+        "createdAt": "2025-10-09T12:09:39.666Z",
+        "updatedAt": "2025-10-09T12:09:39.666Z"
+      }
+    ],
+    "races": [
+      {
+        "id": "cmgjdlhao000l0uur3nu5xcn5",
+        "profileId": "cmgi2ckbf00010uzpy2a0xsul",
+        "name": "spartan race ",
+        "date": "2025-10-25T00:00:00.000Z",
+        "location": "saint raphael ",
+        "distance": "21",
+        "result": "",
+        "status": "upcoming",
+        "url": "https://fr.spartan.com",
+        "logoUrl": "https://logo.clearbit.com/fr.spartan.com",
+        "createdAt": "2025-10-09T12:10:22.032Z",
+        "updatedAt": "2025-10-09T14:02:32.283Z"
+      },
+      {
+        "id": "cmgj7k11n000b0u6zzrey1tjk",
+        "profileId": "cmgi2ckbf00010uzpy2a0xsul",
+        "name": "spartan ",
+        "date": "2025-10-07T00:00:00.000Z",
+        "location": "saint raphael ",
+        "distance": "21km",
+        "result": "35ème",
+        "status": "completed",
+        "url": "https://fr.spartan.com/",
+        "logoUrl": "https://logo.clearbit.com/fr.spartan.com",
+        "createdAt": "2025-10-09T09:21:16.619Z",
+        "updatedAt": "2025-10-15T10:30:55.241Z"
+      },
+      {
+        "id": "cmgjgz6hy00090u4drpj9myyu",
+        "profileId": "cmgi2ckbf00010uzpy2a0xsul",
+        "name": "hyrox ",
+        "date": "2025-11-22T00:00:00.000Z",
+        "location": "paris",
+        "distance": "pro",
+        "result": "",
+        "status": "upcoming",
+        "url": "https://hyroxfrance.com",
+        "logoUrl": "https://hyroxfrance.com/wp-content/uploads/2022/03/HYROX-Logo.svg",
+        "createdAt": "2025-10-09T13:45:00.070Z",
+        "updatedAt": "2025-10-17T13:13:49.740Z"
+      }
+    ],
+    "sponsors": [
+      {
+        "id": "cmgjdm8xv000n0uurfqawes9s",
+        "profileId": "cmgi2ckbf00010uzpy2a0xsul",
+        "name": "Nike",
+        "logoUrl": "https://logo.clearbit.com/www.nike.com",
+        "websiteUrl": "https://www.nike.com",
+        "promoCode": "PROMO10",
+        "description": "",
+        "position": 2,
+        "clicks": 0,
+        "createdAt": "2025-10-09T12:10:57.859Z",
+        "updatedAt": "2025-10-09T13:00:38.353Z"
+      },
+      {
+        "id": "cmgjfeqgf001d0uurv4a9ttm8",
+        "profileId": "cmgi2ckbf00010uzpy2a0xsul",
+        "name": "NUTRIPURE",
+        "logoUrl": "https://logo.clearbit.com/www.nutripure.fr",
+        "websiteUrl": "https://www.nutripure.fr",
+        "promoCode": "PROMO15",
+        "description": "",
+        "position": 3,
+        "clicks": 0,
+        "createdAt": "2025-10-09T13:01:06.543Z",
+        "updatedAt": "2025-10-09T13:01:06.543Z"
+      }
+    ],
+    "affiliates": [],
+    "referralCodes": [],
+    "referrals": [],
+    "commissions": []
+  },
+  "stats": {
+    "users": 2,
+    "profiles": 2,
+    "links": 2,
+    "races": 3,
+    "sponsors": 2,
+    "affiliates": 0,
+    "referralCodes": 0,
+    "referrals": 0,
+    "commissions": 0
+  }
+}

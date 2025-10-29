@@ -1,0 +1,6 @@
+# Fichiers à ignorer pour Vercel
+.env*
+*.log
+.DS_Store
+node_modules/.cache
+.next/cache

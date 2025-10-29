@@ -1,0 +1,18 @@
+{
+  "name": "athlink-saas",
+  "version": "1.0.0",
+  "description": "Plateforme pour athlètes - Application pure Supabase",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.44.4"
+  },
+  "supabase": {
+    "url": "https://ioyklugzwavjyondimwd.supabase.co",
+    "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlveWtsdWd6d2F2anlvbmRpbXdkIiwiaWF0IjoxNzU5OTIzMjQxLCJleHAiOjIwNzU0OTkyNDF9.erXctfavoMVh_j_iy-uM7YPMwqktSSs1ZvS2gz9Q04w",
+    "service_role_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlveWtsdWd6d2F2anlvbmRpbXdkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTkyMzI0MSwiZXhwIjoyMDc1NDk5MjQxfQ.Y4CSVAf9w1Ji97UpwouzsfVvlK5v1dP1w0BcdwOF53U"
+  }
+}

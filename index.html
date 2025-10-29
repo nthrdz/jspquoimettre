@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlink - Plateforme Sportive</title>
+    <meta name="description" content="Athlink - La plateforme sportive pour les athlètes. Gérez votre profil, partagez vos performances et connectez-vous avec d'autres sportifs.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        .hidden { display: none; }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #fff;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-blue-600">Athlink</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="showLoginBtn" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                        Se connecter
+                    </button>
+                    <button id="showSignupBtn" class="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium">
+                        S'inscrire
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page d'accueil -->
+    <div id="homePage" class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
+                Bienvenue sur Athlink
+            </h1>
+            <p class="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+                La plateforme sportive pour les athlètes. Gérez votre profil, partagez vos performances et connectez-vous avec d'autres sportifs.
+            </p>
+            <div class="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+                <div class="rounded-md shadow">
+                    <button id="showSignupBtn2" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10">
+                        Commencer maintenant
+                    </button>
+                </div>
+                <div class="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                    <button id="showLoginBtn2" class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+                        Se connecter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire de connexion -->
+    <div id="loginPage" class="hidden max-w-md mx-auto mt-8 bg-white py-8 px-4 shadow sm:px-10">
+        <div>
+            <h2 class="text-3xl font-bold text-center text-gray-900">Connexion</h2>
+            <form id="loginForm" class="mt-6 space-y-6">
+                <div>
+                    <label for="loginEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input id="loginEmail" name="email" type="email" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm">
+                </div>
+                <div>
+                    <label for="loginPassword" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                    <input id="loginPassword" name="password" type="password" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm">
+                </div>
+                <div id="loginError" class="hidden text-red-600 text-sm"></div>
+                <div>
+                    <button type="submit" id="loginBtn" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <span id="loginBtnText">Se connecter</span>
+                        <div id="loginBtnLoading" class="hidden loading-spinner"></div>
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button type="button" id="backToHomeFromLogin" class="text-blue-600 hover:text-blue-500">
+                        ← Retour à l'accueil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulaire d'inscription -->
+    <div id="signupPage" class="hidden max-w-md mx-auto mt-8 bg-white py-8 px-4 shadow sm:px-10">
+        <div>
+            <h2 class="text-3xl font-bold text-center text-gray-900">Inscription</h2>
+            <form id="signupForm" class="mt-6 space-y-6">
+                <div>
+                    <label for="signupEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input id="signupEmail" name="email" type="email" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm">
+                </div>
+                <div>
+                    <label for="signupPassword" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+                    <input id="signupPassword" name="password" type="password" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm">
+                </div>
+                <div>
+                    <label for="signupUsername" class="block text-sm font-medium text-gray-700">Nom d'utilisateur</label>
+                    <input id="signupUsername" name="username" type="text" required class="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm">
+                </div>
+                <div>
+                    <label for="signupSport" class="block text-sm font-medium text-gray-700">Sport principal</label>
+                    <select id="signupSport" name="sport" required class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">Sélectionnez un sport</option>
+                        <option value="RUNNING">🏃 Course</option>
+                        <option value="CYCLING">🚴 Cyclisme</option>
+                        <option value="SWIMMING">🏊 Natation</option>
+                        <option value="TRIATHLON">🏊🚴🏃 Triathlon</option>
+                    </select>
+                </div>
+                <div id="signupError" class="hidden text-red-600 text-sm"></div>
+                <div>
+                    <button type="submit" id="signupBtn" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <span id="signupBtnText">S'inscrire</span>
+                        <div id="signupBtnLoading" class="hidden loading-spinner"></div>
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button type="button" id="backToHomeFromSignup" class="text-blue-600 hover:text-blue-500">
+                        ← Retour à l'accueil
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="hidden max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">Mon Dashboard</h2>
+            <div class="space-y-4">
+                <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                <p><strong>Nom d'utilisateur:</strong> <span id="userUsername"></span></p>
+                <p><strong>Sport:</strong> <span id="userSport"></span></p>
+            </div>
+            <div class="mt-8">
+                <button id="logoutBtn" class="bg-red-600 text-white hover:bg-red-700 px-4 py-2 rounded-md text-sm font-medium">
+                    Se déconnecter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration Supabase
+        const SUPABASE_URL = 'https://ioyklugzwavjyondimwd.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlveWtsdWd6d2F2anlvbmRpbXdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MjMyNDEsImV4cCI6MjA3NTQ5OTI0MX0.erXctfavoMVh_j_iy-uM7YPMwqktSSs1ZvS2gz9Q04w';
+        
+        // Initialiser Supabase
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
+            }
+        });
+
+        // Variables globales
+        let currentUser = null;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Initialisation de l\'application Athlink');
+            checkAuth();
+            setupEventListeners();
+        });
+
+        // Vérifier l'authentification au chargement
+        async function checkAuth() {
+            try {
+                const { data: { user }, error } = await supabaseClient.auth.getUser();
+                if (user && !error) {
+                    currentUser = user;
+                    showDashboard();
+                } else {
+                    showHome();
+                }
+            } catch (error) {
+                console.error('Erreur de vérification auth:', error);
+                showHome();
+            }
+        }
+
+        // Configuration des événements
+        function setupEventListeners() {
+            // Boutons de navigation
+            document.getElementById('showLoginBtn').addEventListener('click', () => showLogin());
+            document.getElementById('showLoginBtn2').addEventListener('click', () => showLogin());
+            document.getElementById('showSignupBtn').addEventListener('click', () => showSignup());
+            document.getElementById('showSignupBtn2').addEventListener('click', () => showSignup());
+            
+            // Boutons de retour
+            document.getElementById('backToHomeFromLogin').addEventListener('click', () => showHome());
+            document.getElementById('backToHomeFromSignup').addEventListener('click', () => showHome());
+            
+            // Formulaires
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('signupForm').addEventListener('submit', handleSignup);
+            
+            // Déconnexion
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+        }
+
+        // Gestion de la connexion
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            setLoading('loginBtn', 'loginBtnText', 'loginBtnLoading', true);
+            hideError('loginError');
+            
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) {
+                    showError('loginError', 'Email ou mot de passe incorrect');
+                    return;
+                }
+                
+                if (data.user) {
+                    currentUser = data.user;
+                    console.log('✅ Connexion réussie');
+                    showDashboard();
+                }
+                
+            } catch (error) {
+                console.error('Erreur de connexion:', error);
+                showError('loginError', 'Une erreur est survenue');
+            } finally {
+                setLoading('loginBtn', 'loginBtnText', 'loginBtnLoading', false);
+            }
+        }
+
+        // Gestion de l'inscription
+        async function handleSignup(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const username = document.getElementById('signupUsername').value;
+            const sport = document.getElementById('signupSport').value;
+            
+            setLoading('signupBtn', 'signupBtnText', 'signupBtnLoading', true);
+            hideError('signupError');
+            
+            try {
+                // Inscription avec Supabase Auth
+                const { data: authData, error: authError } = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            username,
+                            sport,
+                            name: username
+                        }
+                    }
+                });
+                
+                if (authError) {
+                    showError('signupError', authError.message);
+                    return;
+                }
+                
+                if (authData.user) {
+                    currentUser = authData.user;
+                    console.log('✅ Inscription réussie');
+                    
+                    // Créer le profil dans la table profiles
+                    const { error: profileError } = await supabaseClient
+                        .from('profiles')
+                        .insert([
+                            { 
+                                id: authData.user.id, 
+                                username: username, 
+                                display_name: username, 
+                                sport: sport 
+                            }
+                        ]);
+                    
+                    if (profileError) {
+                        console.error('Erreur de création de profil:', profileError);
+                    }
+                    
+                    showDashboard();
+                }
+                
+            } catch (error) {
+                console.error('Erreur d\'inscription:', error);
+                showError('signupError', 'Une erreur est survenue');
+            } finally {
+                setLoading('signupBtn', 'signupBtnText', 'signupBtnLoading', false);
+            }
+        }
+
+        // Gestion de la déconnexion
+        async function handleLogout() {
+            try {
+                const { error } = await supabaseClient.auth.signOut();
+                if (error) {
+                    console.error('Erreur de déconnexion:', error);
+                    return;
+                }
+                currentUser = null;
+                console.log('✅ Déconnexion réussie');
+                showHome();
+            } catch (error) {
+                console.error('Erreur de déconnexion:', error);
+            }
+        }
+
+        // Fonctions d'affichage des pages
+        function showHome() {
+            document.getElementById('homePage').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('signupPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.add('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('signupPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.add('hidden');
+        }
+
+        function showSignup() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('signupPage').classList.remove('hidden');
+            document.getElementById('dashboardPage').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('signupPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+            
+            if (currentUser) {
+                const userEmail = currentUser.email;
+                const userUsername = currentUser.user_metadata?.username || 'N/A';
+                const userSport = getSportDisplayName(currentUser.user_metadata?.sport) || 'N/A';
+                
+                document.getElementById('userEmail').textContent = userEmail;
+                document.getElementById('userUsername').textContent = userUsername;
+                document.getElementById('userSport').textContent = userSport;
+            }
+        }
+
+        // Fonctions utilitaires
+        function getSportDisplayName(sportCode) {
+            const sports = {
+                'RUNNING': '🏃 Course',
+                'CYCLING': '🚴 Cyclisme',
+                'SWIMMING': '🏊 Natation',
+                'TRIATHLON': '🏊🚴🏃 Triathlon'
+            };
+            return sports[sportCode] || sportCode;
+        }
+
+        function setLoading(buttonId, textId, loadingId, isLoading) {
+            const button = document.getElementById(buttonId);
+            const text = document.getElementById(textId);
+            const loading = document.getElementById(loadingId);
+            
+            if (isLoading) {
+                button.disabled = true;
+                text.classList.add('hidden');
+                loading.classList.remove('hidden');
+            } else {
+                button.disabled = false;
+                text.classList.remove('hidden');
+                loading.classList.add('hidden');
+            }
+        }
+
+        function showError(errorId, message) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+        }
+
+        function hideError(errorId) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

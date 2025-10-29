@@ -1,0 +1,20 @@
+{
+  "name": "athlink-supabase-app",
+  "version": "1.0.0",
+  "description": "Application Athlink avec authentification Supabase",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "deploy": "git add . && git commit -m 'Deploy' && git push origin main"
+  },
+  "keywords": [
+    "supabase",
+    "html",
+    "css",
+    "javascript",
+    "athlink",
+    "sport"
+  ],
+  "author": "Athlink",
+  "license": "MIT"
+}

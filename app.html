@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlink - Plateforme pour Athlètes</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .success {
+            color: #27ae60;
+            font-size: 14px;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-switch a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .form-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .dashboard {
+            text-align: center;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .config-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .config-section h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .config-section p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .config-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo">
+            <h1>Athlink</h1>
+        </div>
+
+        <!-- Configuration Supabase -->
+        <div id="configSection" class="config-section">
+            <h3>🔧 Configuration Supabase</h3>
+            <p>Entrez vos clés Supabase pour commencer :</p>
+            <input type="text" id="supabaseUrl" class="config-input" placeholder="https://votre-projet.supabase.co" value="https://ioyklugzwavjyondimwd.supabase.co">
+            <input type="text" id="supabaseKey" class="config-input" placeholder="Votre clé anon Supabase" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlveWtsdWd6d2F2anlvbmRpbXdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MjMyNDEsImV4cCI6MjA3NTQ5OTI0MX0.erXctfavoMVh_j_iy-uM7YPMwqktSSs1ZvS2gz9Q04w">
+            <button class="config-btn" onclick="saveConfig()">Sauvegarder</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="hidden">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Bon retour !</h2>
+            <form id="loginFormElement">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Mot de passe</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn" id="loginBtn">
+                    <span id="loginBtnText">Se connecter</span>
+                    <div class="loading hidden" id="loginLoading"></div>
+                </button>
+                <div id="loginError" class="error hidden"></div>
+                <div id="loginSuccess" class="success hidden"></div>
+            </form>
+            <div class="form-switch">
+                Pas de compte ? <a href="#" id="showSignup">Créer un compte</a>
+            </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signupForm" class="hidden">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Créer un compte</h2>
+            <form id="signupFormElement">
+                <div class="form-group">
+                    <label for="signupName">Nom complet</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupUsername">Nom d'utilisateur</label>
+                    <input type="text" id="signupUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupSport">Sport principal</label>
+                    <input type="text" id="signupSport" placeholder="Course à pied, Cyclisme..." required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Mot de passe</label>
+                    <input type="password" id="signupPassword" required minlength="8">
+                    <small style="color: #666; font-size: 12px;">Minimum 8 caractères</small>
+                </div>
+                <button type="submit" class="btn" id="signupBtn">
+                    <span id="signupBtnText">Créer mon compte</span>
+                    <div class="loading hidden" id="signupLoading"></div>
+                </button>
+                <div id="signupError" class="error hidden"></div>
+                <div id="signupSuccess" class="success hidden"></div>
+            </form>
+            <div class="form-switch">
+                Déjà un compte ? <a href="#" id="showLogin">Se connecter</a>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="hidden">
+            <div class="dashboard">
+                <h2 style="margin-bottom: 20px; color: #333;">Bienvenue sur Athlink !</h2>
+                <div class="user-info">
+                    <h3 id="userName"></h3>
+                    <p id="userEmail"></p>
+                    <p id="userSport"></p>
+                </div>
+                <button class="logout-btn" id="logoutBtn">Se déconnecter</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let supabase = null
+        let currentUser = null
+
+        // Éléments DOM
+        const configSection = document.getElementById('configSection')
+        const loginForm = document.getElementById('loginForm')
+        const signupForm = document.getElementById('signupForm')
+        const dashboard = document.getElementById('dashboard')
+        const showSignup = document.getElementById('showSignup')
+        const showLogin = document.getElementById('showLogin')
+        const logoutBtn = document.getElementById('logoutBtn')
+
+        // Fonctions utilitaires
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId)
+            errorElement.textContent = message
+            errorElement.classList.remove('hidden')
+        }
+
+        function hideError(elementId) {
+            const errorElement = document.getElementById(elementId)
+            errorElement.classList.add('hidden')
+        }
+
+        function showSuccess(elementId, message) {
+            const successElement = document.getElementById(elementId)
+            successElement.textContent = message
+            successElement.classList.remove('hidden')
+        }
+
+        function hideSuccess(elementId) {
+            const successElement = document.getElementById(elementId)
+            successElement.classList.add('hidden')
+        }
+
+        function setLoading(btnId, loadingId, textId, isLoading) {
+            const btn = document.getElementById(btnId)
+            const loading = document.getElementById(loadingId)
+            const text = document.getElementById(textId)
+            
+            if (isLoading) {
+                btn.disabled = true
+                loading.classList.remove('hidden')
+                text.classList.add('hidden')
+            } else {
+                btn.disabled = false
+                loading.classList.add('hidden')
+                text.classList.remove('hidden')
+            }
+        }
+
+        function switchForm(formToShow) {
+            configSection.classList.add('hidden')
+            loginForm.classList.add('hidden')
+            signupForm.classList.add('hidden')
+            dashboard.classList.add('hidden')
+            
+            if (formToShow === 'config') {
+                configSection.classList.remove('hidden')
+            } else if (formToShow === 'login') {
+                loginForm.classList.remove('hidden')
+            } else if (formToShow === 'signup') {
+                signupForm.classList.remove('hidden')
+            } else if (formToShow === 'dashboard') {
+                dashboard.classList.remove('hidden')
+            }
+        }
+
+        // Sauvegarder la configuration Supabase
+        function saveConfig() {
+            const url = document.getElementById('supabaseUrl').value.trim()
+            const key = document.getElementById('supabaseKey').value.trim()
+            
+            if (!url || !key) {
+                alert('Veuillez remplir tous les champs')
+                return
+            }
+
+            if (!url.includes('supabase.co')) {
+                alert('L\'URL Supabase doit contenir "supabase.co"')
+                return
+            }
+
+            // Sauvegarder dans le localStorage
+            localStorage.setItem('supabaseUrl', url)
+            localStorage.setItem('supabaseKey', key)
+
+            // Initialiser Supabase
+            try {
+                supabase = window.supabase.createClient(url, key)
+                console.log('✅ Supabase initialisé avec succès')
+                
+                // Tester la connexion
+                testSupabaseConnection()
+            } catch (error) {
+                console.error('❌ Erreur d\'initialisation Supabase:', error)
+                alert('Erreur d\'initialisation Supabase. Vérifiez vos clés.')
+            }
+        }
+
+        // Tester la connexion Supabase
+        async function testSupabaseConnection() {
+            try {
+                const { data, error } = await supabase.auth.getSession()
+                if (error) {
+                    console.log('⚠️ Connexion Supabase OK, mais pas de session active')
+                } else {
+                    console.log('✅ Connexion Supabase OK')
+                }
+                
+                // Passer au formulaire de connexion
+                switchForm('login')
+            } catch (error) {
+                console.error('❌ Erreur de test Supabase:', error)
+                alert('Erreur de connexion à Supabase. Vérifiez vos clés.')
+            }
+        }
+
+        // Charger la configuration sauvegardée
+        function loadConfig() {
+            const url = localStorage.getItem('supabaseUrl') || 'https://ioyklugzwavjyondimwd.supabase.co'
+            const key = localStorage.getItem('supabaseKey') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlveWtsdWd6d2F2anlvbmRpbXdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MjMyNDEsImV4cCI6MjA3NTQ5OTI0MX0.erXctfavoMVh_j_iy-uM7YPMwqktSSs1ZvS2gz9Q04w'
+            
+            document.getElementById('supabaseUrl').value = url
+            document.getElementById('supabaseKey').value = key
+            
+            // Initialiser Supabase automatiquement
+            try {
+                supabase = window.supabase.createClient(url, key)
+                console.log('✅ Configuration Supabase chargée')
+                checkAuth()
+            } catch (error) {
+                console.error('❌ Erreur d\'initialisation:', error)
+                switchForm('config')
+            }
+        }
+
+        // Vérifier l'authentification
+        async function checkAuth() {
+            if (!supabase) return
+            
+            try {
+                const { data: { user } } = await supabase.auth.getUser()
+                if (user) {
+                    currentUser = user
+                    await loadUserData(user)
+                    switchForm('dashboard')
+                } else {
+                    switchForm('login')
+                }
+            } catch (error) {
+                console.error('❌ Erreur de vérification auth:', error)
+                switchForm('login')
+            }
+        }
+
+        // Charger les données utilisateur
+        async function loadUserData(user) {
+            document.getElementById('userName').textContent = user.user_metadata?.name || 'Utilisateur'
+            document.getElementById('userEmail').textContent = user.email
+            document.getElementById('userSport').textContent = user.user_metadata?.sport || 'Non spécifié'
+        }
+
+        // Gestion de la connexion
+        document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            
+            if (!supabase) {
+                showError('loginError', 'Supabase non configuré')
+                return
+            }
+            
+            const email = document.getElementById('loginEmail').value
+            const password = document.getElementById('loginPassword').value
+            
+            hideError('loginError')
+            hideSuccess('loginSuccess')
+            setLoading('loginBtn', 'loginLoading', 'loginBtnText', true)
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                })
+
+                if (error) {
+                    showError('loginError', 'Email ou mot de passe incorrect')
+                } else {
+                    showSuccess('loginSuccess', 'Connexion réussie !')
+                    currentUser = data.user
+                    await loadUserData(data.user)
+                    setTimeout(() => switchForm('dashboard'), 1000)
+                }
+            } catch (error) {
+                console.error('Erreur de connexion:', error)
+                showError('loginError', 'Une erreur est survenue')
+            } finally {
+                setLoading('loginBtn', 'loginLoading', 'loginBtnText', false)
+            }
+        })
+
+        // Gestion de l'inscription
+        document.getElementById('signupFormElement').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            
+            if (!supabase) {
+                showError('signupError', 'Supabase non configuré')
+                return
+            }
+            
+            const name = document.getElementById('signupName').value
+            const username = document.getElementById('signupUsername').value
+            const sport = document.getElementById('signupSport').value
+            const email = document.getElementById('signupEmail').value
+            const password = document.getElementById('signupPassword').value
+            
+            hideError('signupError')
+            hideSuccess('signupSuccess')
+            setLoading('signupBtn', 'signupLoading', 'signupBtnText', true)
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            name: name,
+                            username: username,
+                            sport: sport
+                        }
+                    }
+                })
+
+                if (error) {
+                    showError('signupError', error.message)
+                } else {
+                    showSuccess('signupSuccess', 'Compte créé avec succès !')
+                    currentUser = data.user
+                    await loadUserData(data.user)
+                    setTimeout(() => switchForm('dashboard'), 1000)
+                }
+            } catch (error) {
+                console.error('Erreur d\'inscription:', error)
+                showError('signupError', 'Une erreur est survenue')
+            } finally {
+                setLoading('signupBtn', 'signupLoading', 'signupBtnText', false)
+            }
+        })
+
+        // Gestion de la déconnexion
+        logoutBtn.addEventListener('click', async () => {
+            if (supabase) {
+                await supabase.auth.signOut()
+            }
+            currentUser = null
+            switchForm('login')
+        })
+
+        // Navigation entre les formulaires
+        showSignup.addEventListener('click', (e) => {
+            e.preventDefault()
+            switchForm('signup')
+        })
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault()
+            switchForm('login')
+        })
+
+        // Écouter les changements d'authentification
+        function setupAuthListener() {
+            if (supabase) {
+                supabase.auth.onAuthStateChange((event, session) => {
+                    console.log('Auth state changed:', event)
+                    if (event === 'SIGNED_IN' && session) {
+                        currentUser = session.user
+                        loadUserData(session.user)
+                        switchForm('dashboard')
+                    } else if (event === 'SIGNED_OUT') {
+                        currentUser = null
+                        switchForm('login')
+                    }
+                })
+            }
+        }
+
+        // Initialiser l'application
+        document.addEventListener('DOMContentLoaded', () => {
+            loadConfig()
+            setupAuthListener()
+        })
+    </script>
+</body>
+</html>
